@@ -156,6 +156,14 @@ func (s *Service) GetAgentInformation(ctx context.Context, _ *agentv0.AgentInfor
 	}
 
 	return services.Advertisement{
+		// Workload lint/compile/test are unsupported. Preserve the builder
+		// operations this agent implements instead of using legacy probing.
+		Validation: &agentv0.ValidationCapabilities{
+			Audit:         &agentv0.ValidationOperationCapability{Supported: true, Scopes: []agentv0.ValidationScope{agentv0.ValidationScope_VALIDATION_SCOPE_WORKSPACE}},
+			ArtifactBuild: &agentv0.ValidationOperationCapability{Supported: true, Scopes: []agentv0.ValidationScope{agentv0.ValidationScope_VALIDATION_SCOPE_WORKSPACE}},
+			Sbom:          &agentv0.ValidationOperationCapability{Supported: true, Scopes: []agentv0.ValidationScope{agentv0.ValidationScope_VALIDATION_SCOPE_WORKSPACE}},
+			Sync:          &agentv0.ValidationOperationCapability{Supported: true, Scopes: []agentv0.ValidationScope{agentv0.ValidationScope_VALIDATION_SCOPE_WORKSPACE}},
+		},
 		Backends: runnersbase.BackendSupport{
 			Nix:    true,
 			Docker: true,

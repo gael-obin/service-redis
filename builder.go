@@ -78,6 +78,11 @@ func (s *Builder) Load(ctx context.Context, req *builderv0.LoadRequest) (*builde
 	})
 }
 
+// Sync is non-mutating: this agent owns no generated workload source.
+func (s *Builder) Sync(_ context.Context, _ *builderv0.SyncRequest) (*builderv0.SyncResponse, error) {
+	return s.Builder.SyncResponse()
+}
+
 // Audit scans the redis docker image for HIGH/CRITICAL CVEs via trivy.
 func (s *Builder) Audit(ctx context.Context, req *builderv0.AuditRequest) (*builderv0.AuditResponse, error) {
 	defer s.Wool.Catch()
